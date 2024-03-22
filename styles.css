@@ -1,0 +1,29 @@
+body{
+    background: #333;
+    margin: 0;
+}
+
+.contenedor {
+    margin: 48px auto;
+    width: max-content;
+    display: grid;
+    grid-template-columns: repeat(4,100px);
+    gap: 16px;
+}
+
+.carta {
+    height: 100px;
+    background: #111111;
+    border: 5px solid #444444;
+    cursor:pointer;
+}
+
+.texto{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    height: 50vh;
+    
+}
