@@ -3,32 +3,22 @@
 // Se utilizo lo visto hasta ahora en las clases de Js a partir de DOM
 
 
-
 // Primero creo las constantes para el contenedor de las cartas y la lista de colores
-const contenedorTarjetas = document.querySelector(".contenedor");
-const colores = [
-  "red",
-  "yellow",
-  "green",
-  "blue",
-  "purple",
-  "gold",
-  "greenyellow",
-  "teal",
-];
-
-// Creao una lista duplicada de colores
-const listaColores = [...colores, ...colores];
-
+// Creo una lista duplicada de colores
 // Ahora creo una variable para el contador de tarjetas
-const contadorTarjeta = listaColores.length;
-
 // Creo las variables de estado del juego, sin cartas reveleadas ni activadas y sin el fin del juego activado
+
+
+const contenedorTarjetas = document.querySelector(".contenedor");
+const colores = ["red", "yellow", "green", "blue", "purple", "gold", "greenyellow", "teal"];
+const listaColores = [...colores, ...colores];
+const contadorTarjeta = listaColores.length;
 let cartasReveladas = 0;
 let cartasActivadas = null;
 let finJugada = false;
 
 // Ahora creo una clase para representar una carta del juego
+
 class Carta {
   constructor(color) {
     this.color = color;
@@ -67,6 +57,7 @@ class Carta {
       if (cartasReveladas === contadorTarjeta) {
         this.mostrarMensajeGanador();
       }
+      guardarEstadoJuego();
       return;
     }
 
@@ -101,6 +92,7 @@ class Carta {
 }
 
 // Ahora me toca crear una funcion  para barajar las cartas
+
 function barajar(lista) {
   for (let i = lista.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -109,32 +101,40 @@ function barajar(lista) {
 }
 
 // Ahora tengo que crear una funcion para crear las cartas y agregarlas al contenedor
+
+
 function crearCartas() {
   barajar(listaColores);
-  listaColores.forEach((color) => {
+  listaColores.forEach((color, index) => {
     const carta = new Carta(color);
     contenedorTarjetas.appendChild(carta.elemento);
+    if (localStorage.getItem(`carta-${index}`) === "true") {
+      carta.revelar();
+    }
   });
 }
 
 // Ahora creo otra funcion para reiniciar el juego
+// Vuelvo a reestablecer las variables de estado
+
 function reiniciarJuego() {
-  // Limpio todas las cartas del contenedor
   contenedorTarjetas.innerHTML = "";
-  
-  // Vuelvo a reestablecer las variables de estado
   cartasReveladas = 0;
   cartasActivadas = null;
   finJugada = false;
-
-  // Llamo a la función para crear las cartas
+  localStorage.clear(); // Limpiar datos guardados en localStorage
   crearCartas();
 }
 
-// Creo la logica para iniciar el juego
+function guardarEstadoJuego() {
+  const cartas = document.querySelectorAll(".carta");
+  cartas.forEach((carta, index) => {
+    localStorage.setItem(`carta-${index}`, carta.getAttribute("carta-revelada"));
+  });
+}
+
 function iniciarJuego() {
   crearCartas();
 }
 
-// Llamo a la funcion para iniciar el juego
 iniciarJuego();
